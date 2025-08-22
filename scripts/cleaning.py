@@ -36,7 +36,7 @@ filtered = filtered.drop(columns=['hardship_flag', 'hardship_type', 'hardship_re
 #drop columns that cause data leakage
 
 filtered = filtered.drop(columns=['out_prncp', 'out_prncp_inv', 'total_pymnt', 'total_pymnt_inv', 'total_rec_prncp',
-                                  'total_rec_int', 'total_rec_late_fee', 'recoveries', 'issue_d',
+                                  'total_rec_int', 'total_rec_late_fee', 'recoveries',
                                   'collection_recovery_fee', 'last_pymnt_d', 'last_pymnt_amnt', 'next_pymnt_d', 'last_credit_pull_d',
                                   'last_fico_range_high', 'last_fico_range_low'])
 
