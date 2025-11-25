@@ -12,11 +12,11 @@ filtered = filtered[filtered['loan_status'].isin(['Fully Paid',
 
 
 feature_map = {
-    'Fully Paid': 1,
-    'Does not meet the credit policy. Status:Fully Paid': 1,
-    'Charged Off': 0,
-    'Default': 0,
-    'Does not meet the credit policy. Status:Charged Off': 0
+    'Fully Paid': 0,
+    'Does not meet the credit policy. Status:Fully Paid': 0,
+    'Charged Off': 1,
+    'Default': 1,
+    'Does not meet the credit policy. Status:Charged Off': 1
 }
 
 filtered['outcome'] = filtered['loan_status'].map(feature_map)
