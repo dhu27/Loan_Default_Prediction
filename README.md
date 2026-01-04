@@ -20,6 +20,7 @@ This project analyzes LendingClub loan data to understand the factors that contr
 - `data/`: Raw data storage (unzipped copies)
 	- `accepted_2007_to_2018q4.csv/accepted_2007_to_2018Q4.csv`
 	- `rejected_2007_to_2018q4.csv/rejected_2007_to_2018Q4.csv`
+- `Loan Default Project Dashboard.pbix`: Power BI report for interactive exploration
 
 ## Data Cleaning & Feature Engineering
 
@@ -41,15 +42,25 @@ This project analyzes LendingClub loan data to understand the factors that contr
 
 In addition to the notebooks, this project includes a comprehensive Power BI dashboard built to make the EDA + modeling outcomes easy to explore and present.
 
-Typical views included in the dashboard:
-- **Portfolio overview**: total loans, default rate, and volume by time
-- **Risk segmentation**: default rate by grade, term, purpose, and other key categorical features
-- **Borrower attributes**: distributions and default-rate lift by FICO, interest rate, DTI, and income bands
-- **Model results (summary)**: side-by-side comparison of recall/precision/F1/AUC where available
+Power BI file:
+- `Loan Default Project Dashboard.pbix`
+
+Report pages:
+- **Executive Overview**: high-level KPIs (portfolio volume, default rate) and top drivers/segments.
+- **Credit Risk Analysis**: risk segmentation and default performance by grade, term, purpose, and other key categorical drivers.
+- **Borrower Profile Analysis**: borrower attribute distributions and default-rate lift by bands (e.g., FICO, DTI, income).
+- **Loan Profile Analysis**: loan characteristics (e.g., amount, interest rate, term, purpose) and how they relate to outcomes.
+
+How to open:
+1. Install **Power BI Desktop**.
+2. Open `Loan Default Project Dashboard.pbix`.
+
+Data source / refresh:
+- The report is designed to use `csv/filtered.csv` as its primary data source.
+- If Power BI prompts for a missing/invalid path, update the data source settings to point to your local `csv/filtered.csv` and click **Refresh**.
 
 Notes:
-- The Power BI `.pbix` file is not currently tracked in this repository. If you want it included, add it under a folder like `powerbi/` and link it here.
-- The dashboard is designed to use `csv/filtered.csv` as its primary data source.
+- If you move the repository folder, you may need to re-point the data source path again.
 
 
 ## Modeling & Results
