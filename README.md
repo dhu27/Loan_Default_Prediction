@@ -5,16 +5,21 @@ This project analyzes LendingClub loan data to understand the factors that contr
 
 ## Project Structure
 
-- `data/`: Raw and processed datasets
-	- `accepted_2007_to_2018Q4.csv.gz`, `rejected_2007_to_2018Q4.csv.gz`: Raw data files
-	- `accepted_2007_to_2018q4.csv/`, `rejected_2007_to_2018q4.csv/`: Unzipped CSVs
-	- `scripts/`: Data cleaning and joining scripts
-- `EDA/`: Exploratory Data Analysis scripts and saved visualizations
-	- `distributions.py`: Generates feature distributions and outcome plots
-	- `graphs/`: Output figures from EDA
-- `csv/`: Feature and column documentation
+- `EDA.ipynb`: Exploratory data analysis notebook
+- `ML/`: Modeling notebooks
+	- `LogisticRegression.ipynb`
+	- `LightGBM.ipynb`
+	- `XGboostFinal.ipynb`
+- `scripts/`: Data cleaning / preprocessing scripts
+	- `cleaning.py`: Generates the cleaned modeling dataset (`csv/filtered.csv`)
+- `csv/`: CSVs and feature/column documentation
+	- `accepted_2007_to_2018Q4.csv`, `rejected_2007_to_2018Q4.csv`: Source CSVs used by scripts
+	- `filtered.csv`: Cleaned dataset used for EDA/modeling
 	- `columns.txt`: List and description of all columns
 	- `features.txt`: Selected features for modeling
+- `data/`: Raw data storage (unzipped copies)
+	- `accepted_2007_to_2018q4.csv/accepted_2007_to_2018Q4.csv`
+	- `rejected_2007_to_2018q4.csv/rejected_2007_to_2018Q4.csv`
 
 ## Data Cleaning & Feature Engineering
 
@@ -24,13 +29,27 @@ This project analyzes LendingClub loan data to understand the factors that contr
 
 ## Exploratory Data Analysis (EDA) Insights
 
-- **FICO Scores**: Higher FICO scores are strongly associated with fully paid loans, while lower scores are more common among defaults.
+- **FICO Scores**: The FICO low/high distributions appear essentially identical between defaulted and fully paid loans in this dataset, suggesting FICO alone is not a strong differentiator here.
 - **Interest Rate**: Defaulted loans tend to have higher interest rates, with a more normal distribution, while fully paid loans are skewed toward lower rates.
 - **Annual Income**: Both defaulted and fully paid loans show similar income distributions after outlier removal, suggesting income alone is not a strong differentiator.
 - **DTI (Debt-to-Income Ratio)**: Higher DTI ratios are slightly more prevalent among defaulted loans, but the difference is modest.
 - **Loan Grade & Term**: Lower grades and longer terms (60 months) are more common in defaulted loans.
 - **Loan Purpose**: Certain purposes (e.g., debt consolidation) dominate among defaults, as shown in the Pareto chart.
 - **Feature Correlations**: FICO scores, interest rates, and DTI show meaningful correlations with loan outcome, guiding feature selection for modeling.
+
+## Power BI Dashboard
+
+In addition to the notebooks, this project includes a comprehensive Power BI dashboard built to make the EDA + modeling outcomes easy to explore and present.
+
+Typical views included in the dashboard:
+- **Portfolio overview**: total loans, default rate, and volume by time
+- **Risk segmentation**: default rate by grade, term, purpose, and other key categorical features
+- **Borrower attributes**: distributions and default-rate lift by FICO, interest rate, DTI, and income bands
+- **Model results (summary)**: side-by-side comparison of recall/precision/F1/AUC where available
+
+Notes:
+- The Power BI `.pbix` file is not currently tracked in this repository. If you want it included, add it under a folder like `powerbi/` and link it here.
+- The dashboard is designed to use `csv/filtered.csv` as its primary data source.
 
 
 ## Modeling & Results
@@ -57,9 +76,14 @@ Three models were trained and compared: Logistic Regression, LightGBM, and XGBoo
 
 | Model                | Recall (defaults) | Precision (defaults) | F1 (defaults) | ROC AUC  |
 |----------------------|-------------------|----------------------|--------------|----------|
-| Logistic Regression  | 0.68              | 0.31                 | —            | ~0.73    |
-| LightGBM             | 0.683             | —                    | —            | 0.7308   |
-| XGBoost (tuned)      | 0.624             | —                    | 0.446        | ~0.73    |
+| Logistic Regression  | 0.680             | 0.310                | 0.420        | 0.7062   |
+| LightGBM             | 0.683             | 0.330                | 0.445        | 0.7308   |
+| XGBoost (tuned)      | 0.624             | 0.347                | 0.446        | 0.7296   |
+
+Table notes:
+- Logistic Regression metrics come from the saved `classification_report` output in `ML/LogisticRegression.ipynb`.
+- XGBoost tuned-threshold metrics come from the tuned-threshold `classification_report` output in `ML/XGboostFinal.ipynb`. AUC is reported on the predicted probabilities.
+- LightGBM metrics come from the `classification_report` and printed ROC AUC output in `ML/LightGBM.ipynb`.
 
 **Major Insights:**
 - High recall is critical for default detection; all models prioritized this over precision.
@@ -72,4 +96,4 @@ Three models were trained and compared: Logistic Regression, LightGBM, and XGBoo
 - Credit risk is most strongly associated with FICO score, interest rate, loan grade, and term.
 - Income and DTI, while important, are less predictive on their own.
 - Feature engineering and outlier removal improved model performance.
-- Ensemble models (Gradient Boosting) significantly outperform linear models for this task.
+- Ensemble models (Gradient Boosting) modestly outperform the linear baseline for this task.
